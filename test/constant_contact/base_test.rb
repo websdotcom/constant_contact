@@ -1,28 +1,28 @@
 require File.dirname(__FILE__) + '/../test_helper'
 # require 'activeresource'
-require "fixtures/list"
 class BaseTest < Test::Unit::TestCase
   
   # def test_should_use_site_prefix_and_credentials
-  #   assert_equal 'https://baz%25foo:bar@api.constantcontact.com', List.site.to_s    
+  #   assert_equal 'https://baz%25foo:bar@api.constantcontact.com', ConstantContact::List.site.to_s    
   # end
   
-  # def test_should_accept_setting_user
-  #   List.user = 'david'
-  #   assert_equal('david', List.user)
-  #   assert_equal('david', List.connection.user)
-  # end
+  def test_should_accept_setting_user
+    ConstantContact::List.api_key = 'api_key'
+    ConstantContact::List.user = 'david'
+    assert_equal('david', ConstantContact::List.user)
+    assert_equal('api_key%david', ConstantContact::List.connection.user)
+  end
   
   def test_should_accept_setting_api_key
-    List.api_key = 'david'
-    assert_equal('david', List.api_key)
+    ConstantContact::List.api_key = 'david'
+    assert_equal('david', ConstantContact::List.api_key)
   end
   
   
   def test_should_accept_setting_password
-    List.password = 'test123'
-    assert_equal('test123', List.password)
-    assert_equal('test123', List.connection.password)
+    ConstantContact::List.password = 'test123'
+    assert_equal('test123', ConstantContact::List.password)
+    assert_equal('test123', ConstantContact::List.connection.password)
   end
     
   def test_credentials_from_site_are_decoded
@@ -33,24 +33,24 @@ class BaseTest < Test::Unit::TestCase
   end
   
   def test_collection_name
-    assert_equal "lists", List.collection_name
+    assert_equal "lists", ConstantContact::List.collection_name
   end
   
   def test_collection_path
-    List.user = 'joesflowers'
-    assert_equal '/ws/customers/joesflowers/lists', List.collection_path
+    ConstantContact::Base.user = 'joesflowers'
+    assert_equal '/ws/customers/joesflowers/lists', ConstantContact::List.collection_path
   end
   
   def test_element_path
-    List.user = 'joesflowers'
-    assert_equal '/ws/customers/joesflowers/lists/1', List.element_path(1)
+    ConstantContact::Base.user = 'joesflowers'
+    assert_equal '/ws/customers/joesflowers/bases/1', ConstantContact::Base.element_path(1)
   end
   
   def test_should_use_site_prefix_and_credentials
      ConstantContact::Base.user = "joesflowers"
      ConstantContact::Base.password = "password"
      ConstantContact::Base.api_key = "api_key"
-     assert_equal 'https://api.constantcontact.com', ConstantContact::List.site.to_s
+     assert_equal 'https://api.constantcontact.com/', ConstantContact::List.site.to_s
      assert_equal 'https://api.constantcontact.com/lists/:list_id/', ConstantContact::Member.site.to_s
   end
   
@@ -66,12 +66,12 @@ class BaseTest < Test::Unit::TestCase
     end
     
     should 'find one' do
-      list = List.find(1)
+      list = ConstantContact::List.find(1)
       assert_equal "General Interest", list.name
     end
         
     should 'find all' do
-      lists = List.find(:all)
+      lists = ConstantContact::List.find(:all)
       assert_equal 5, lists.size
       assert_equal 'Clients', lists.last.name
     end
@@ -82,6 +82,4 @@ class BaseTest < Test::Unit::TestCase
     end
   end
   
-end  
-
-
+end

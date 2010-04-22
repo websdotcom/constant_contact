@@ -3,5 +3,3 @@ module ConstantContact
     self.site += "/lists/:list_id"
   end
 end
-
-

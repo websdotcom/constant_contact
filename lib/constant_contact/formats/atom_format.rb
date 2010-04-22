@@ -1,3 +1,4 @@
+require 'rexml/document'
 module ActiveResource
   module Formats
     module AtomFormat
