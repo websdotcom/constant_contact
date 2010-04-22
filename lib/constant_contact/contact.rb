@@ -29,6 +29,11 @@ module ConstantContact
       @opt_in_source ||= "ACTION_BY_CUSTOMER"
     end
     
+    # see http://developer.constantcontact.com/doc/manageContacts#create_contact for more info about the two values.
+    def opt_in_source=(val)
+      @opt_in_source = val if ['ACTION_BY_CONTACT','ACTION_BY_CUSTOMER'].include?(val)
+    end
+    
     def list_url(id=nil)
       id ||= defined?(self.list_id) ? self.list_id : 1
       "http://api.constantcontact.com/ws/customers/#{self.class.user}/lists/#{id}"
@@ -62,6 +67,16 @@ module ConstantContact
     def contact_lists=(val)
       @contact_lists = val.kind_of?(Array) ? val : [val]
     end
-
+    
+    def self.find_by_email(email_address)
+      find :first, {:params => {:email => email_address.downcase}}
+    end
+    
+    protected
+    def validate
+      # errors.add(:opt_in_source, 'must be either ACTION_BY_CONTACT or ACTION_BY_CUSTOMER') unless ['ACTION_BY_CONTACT','ACTION_BY_CUSTOMER'].include?(attributes['OptInSource'])
+      # errors.add(:email_address, 'cannot be blank') unless attributes.has_key?('EmailAddress')
+    end
+    
   end
 end

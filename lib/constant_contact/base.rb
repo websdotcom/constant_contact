@@ -41,7 +41,7 @@ module ConstantContact
       
       def collection_path(prefix_options = {}, query_options = nil)
         prefix_options, query_options = split_options(prefix_options) if query_options.nil?
-        "/ws/customers/#{self.user}#{prefix(prefix_options)}#{collection_name}"
+        "/ws/customers/#{self.user}#{prefix(prefix_options)}#{collection_name}#{query_string(query_options)}"
       end  
       
       def element_path(id, prefix_options = {}, query_options = nil)
@@ -49,7 +49,29 @@ module ConstantContact
         integer_id = parse_id(id)
         id_val = integer_id.zero? ? nil : "/#{integer_id}"
         "#{collection_path}#{id_val}#{query_string(query_options)}"
-      end      
+      end
+      
+      # Slight modification to AR::Base.find_every to handle instances
+      # where a single element is returned. This enables calling
+      # <tt>find(:first, {:params => {:email => 'sample@example.com'}})
+      def find_every(options)
+        case from = options[:from]
+        when Symbol
+          instantiate_collection(get(from, options[:params]))
+        when String
+          path = "#{from}#{query_string(options[:params])}"
+          instantiate_collection(connection.get(path, headers) || [])
+        else
+          prefix_options, query_options = split_options(options[:params])
+          path = collection_path(prefix_options, query_options)
+          result = connection.get(path, headers)
+          case result.class.name
+          when 'Hash': instantiate_collection( [ result ], prefix_options )
+          else
+            instantiate_collection( (result || []), prefix_options )
+          end
+        end
+      end
     end
     
     # Slightly tweaked ARes::Base's implementation so all the

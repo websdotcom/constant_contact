@@ -5,27 +5,28 @@ This is a very ActiveResource-like ruby wrapper to the Constant Contact API.  It
 See the [ActiveResource::Base docs](http://api.rubyonrails.org/classes/ActiveResource/Base.html) for more information on how to use this ActiveResource-based wrapper.
 
 Examples
-=======
+--------
 
-Find Lists
-======
-
-
-    ConstantContact::List.find(1)
-    ConstantContact::List.find :all
-
-Find Contact Example
-======
+All examples require setting up either the specific class you'll be use or the Base object before use:
 
     ConstantContact::Base.user = 'user'
     ConstantContact::Base.api_key = 'api-key'
     ConstantContact::Base.password = 'password'
 
+
+### Find Lists
+
+    ConstantContact::List.find(1)
+    ConstantContact::List.find :all
+
+### Find A Contact
+
+
     ConstantContact::Contact.find(1)
     ConstantContact::Contact.find(:first, :params => {:email => 'jon@example.com'})
+    ConstantContact::Contact.find_by_email('jon@example.com') # => same as previous line
 
-Create a Contact (with rescue if it already exists)
-======
+### Create a Contact (with rescue if it already exists)
 
     ConstantContact::Base.user = 'user'
     ConstantContact::Base.api_key = 'api-key'
@@ -45,11 +46,10 @@ Create a Contact (with rescue if it already exists)
       puts e
     end
 
-Find a Contact By Email Address, Check if They're a Member of the Default List
-=====
+### Find a Contact By Email Address, Check if They're a Member of the Default List
 
-    c = ConstantContact::Contact.find(:first, :params => {:email => 'jon@example.com'.downcase})
-    @contact = ConstantContact::Contact.find(ConstantContact::Contact.parse_id(@contact.id))
+    c = ConstantContact::Contact.find_by_email('jon@example.com')
+    @contact = ConstantContact::Contact.find(@contact.int_id)
     puts 'In default contact list.' if @contact.contact_lists.include?(1) # contact_lists is an array of list ids
 
 
