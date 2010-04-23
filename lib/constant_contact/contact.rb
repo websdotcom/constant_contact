@@ -14,14 +14,14 @@ module ConstantContact
     def to_xml
       xml = Builder::XmlMarkup.new
       xml.tag!("Contact", :xmlns => "http://ws.constantcontact.com/ns/1.0/") do
-      	self.attributes.each{|k, v| xml.tag!( k.to_s.camelize, v )}
-      	xml.tag!("OptInSource", self.opt_in_source)
-      	xml.tag!("ContactLists") do
-      	  @contact_lists = [1] if @contact_lists.nil? && self.new?
-          self.contact_lists.each do |list_id|
-      	    xml.tag!("ContactList", :id=> self.list_url(list_id))
+        self.attributes.reject {|k,v| k == 'ContactLists'}.each{|k, v| xml.tag!( k.to_s.camelize, v )}
+        xml.tag!("OptInSource", self.opt_in_source)
+        xml.tag!("ContactLists") do
+          @contact_lists = [1] if @contact_lists.nil? && self.new?
+          self.contact_lists.sort.each do |list_id|
+            xml.tag!("ContactList", :id=> self.list_url(list_id))
           end
-      	end
+        end
       end
     end
     
