@@ -21,3 +21,11 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('README')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+
+begin
+  require 'mg'
+  MG.new('constant_contact.gemspec')
+rescue LoadError
+  warn 'mg not available.'
+  warn 'Install it with: gem i mg'
+end
