@@ -27,10 +27,12 @@ module ActiveResource
       
       def from_atom_data(xml)
         if is_collection?(xml)
-          return content_from_collection(xml)
+          result = content_from_collection(xml)
         else
-          return content_from_single_record(xml)
+          result = content_from_single_record(xml)
         end
+        result.delete('xmlns')
+        return result
       end
       
       def no_content?(xml)
