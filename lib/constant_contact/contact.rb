@@ -71,7 +71,29 @@ module ConstantContact
     def self.find_by_email(email_address)
       find :first, {:params => {:email => email_address.downcase}}
     end
-    
+
+    # Needed a lot of custom work here because of the way ActiveResource turns
+    # arrays into query strings.
+    #   ActiveResource would do: email[]=<email 1>&email[]=<email 2>
+    #   But we need: email=<email 1>&email=<email 2>
+    def self.find_all_by_emails(emails)
+      raise ArgumentError, "Expected an array of emails, got a(n) #{emails.class.name}" unless emails.is_a? Array
+      return [] if email_addresses.empty?
+
+      require 'cgi' unless defined?(CGI) && defined?(CGI::escape)
+      query_string = emails.map{|e| "email=#{CGI.escape(e.to_s.downcase)}"}.join('&')
+
+      path = "/ws/customers/#{self.user}/#{collection_name}?#{query_string}"
+      result = connection.get(path, headers)
+
+      case result
+      when Hash
+        instantiate_collection( [ result ], {} )
+      else
+        instantiate_collection( (result || []), {} )
+      end
+    end
+
     protected
     def validate
       # errors.add(:opt_in_source, 'must be either ACTION_BY_CONTACT or ACTION_BY_CUSTOMER') unless ['ACTION_BY_CONTACT','ACTION_BY_CUSTOMER'].include?(attributes['OptInSource'])
