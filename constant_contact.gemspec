@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency("activeresource")
   s.add_dependency("actionpack")
+  s.add_dependency("builder")
 
   s.add_development_dependency("shoulda")
   s.add_development_dependency("matchy")
