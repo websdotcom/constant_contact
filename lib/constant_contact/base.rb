@@ -65,8 +65,9 @@ module ConstantContact
           prefix_options, query_options = split_options(options[:params])
           path = collection_path(prefix_options, query_options)
           result = connection.get(path, headers)
-          case result.class.name
-          when 'Hash': instantiate_collection( [ result ], prefix_options )
+          case result
+          when Hash
+            instantiate_collection( [ result ], prefix_options )
           else
             instantiate_collection( (result || []), prefix_options )
           end
@@ -80,15 +81,15 @@ module ConstantContact
     def method_missing(method_symbol, *arguments) #:nodoc:
       method_name = method_symbol.to_s
 
-      case method_name.last
+      case method_name[-1,1]
         when "="
-          attributes[method_name.first(-1).camelize] = arguments.first
+          attributes[method_name.chop.camelize] = arguments.first
         when "?"
-          attributes[method_name.first(-1).camelize]
+          attributes[method_name.chop.camelize]
         else
           attributes.has_key?(method_name.camelize) ? attributes[method_name.camelize] : super
       end
-    end        
+    end
 
     # Caching accessor for the the id integer
     def int_id
@@ -138,9 +139,9 @@ module ConstantContact
         <content type=\"application/vnd.ctct+xml\">
         #{self.to_xml}
         </content>
-      </entry>"      
+      </entry>"
     end
-    
+
     # TODO: Move this out to a lib
     def html_encode(txt)
       mapping = { '&' => '&amp;', '>' => '&gt;', '<' => '&lt;', '"' => '&quot;' }
