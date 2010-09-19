@@ -107,12 +107,21 @@ class ContactTest < Test::Unit::TestCase
       ConstantContact::Base.api_key = "api_key"
       stub_get('https://api_key%25joesflowers:password@api.constantcontact.com/ws/customers/joesflowers/contacts', 'all_contacts.xml')
       stub_get('https://api_key%25joesflowers:password@api.constantcontact.com/ws/customers/joesflowers/contacts?email=jon%40example.com', 'single_contact_by_email.xml')
+      stub_get('https://api_key%25joesflowers:password@api.constantcontact.com/ws/customers/joesflowers/contacts?email=jon%40example.com&email=my%40example.com', 'multiple_contacts_by_emails.xml')
     end
     
     should 'find contact with email address' do
        assert_equal 'smith, jon', ConstantContact::Contact.find(:first, :params => {:email => 'jon@example.com'}).Name
     end
     
+    should 'find two contacts with two email addresses' do
+      contacts = ConstantContact::Contact.find_all_by_emails(['jon@example.com', 'my@example.com'])
+      assert_equal Array, contacts.class
+      assert_equal 2, contacts.size
+      assert_equal 'smith, jon', contacts[0].Name
+      assert_equal 'Doe, Marvin', contacts[1].Name
+    end
+
     should 'return nil when asking for contact_lists' do
       assert_equal nil, ConstantContact::Contact.find(:first, :params => {:email => 'jon@example.com'}).contact_lists
     end

@@ -78,7 +78,7 @@ module ConstantContact
     #   But we need: email=<email 1>&email=<email 2>
     def self.find_all_by_emails(emails)
       raise ArgumentError, "Expected an array of emails, got a(n) #{emails.class.name}" unless emails.is_a? Array
-      return [] if email_addresses.empty?
+      return [] if emails.empty?
 
       query_string = emails.map{|e| "email=#{CGI.escape(e.to_s.downcase)}"}.join('&')
 
