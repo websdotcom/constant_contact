@@ -18,7 +18,7 @@ module ConstantContact
         xml.tag!("OptInSource", self.opt_in_source)
         xml.tag!("ContactLists") do
           @contact_lists = [1] if @contact_lists.nil? && self.new?
-          self.contact_lists.sort.each do |list_id|
+          (self.contact_lists || []).sort.each do |list_id|
             xml.tag!("ContactList", :id=> self.list_url(list_id))
           end
         end
