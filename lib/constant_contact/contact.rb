@@ -80,7 +80,6 @@ module ConstantContact
       raise ArgumentError, "Expected an array of emails, got a(n) #{emails.class.name}" unless emails.is_a? Array
       return [] if email_addresses.empty?
 
-      require 'cgi' unless defined?(CGI) && defined?(CGI::escape)
       query_string = emails.map{|e| "email=#{CGI.escape(e.to_s.downcase)}"}.join('&')
 
       path = "/ws/customers/#{self.user}/#{collection_name}?#{query_string}"
