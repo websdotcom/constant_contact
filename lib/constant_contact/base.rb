@@ -11,7 +11,7 @@ module ConstantContact
       # Assumes url structure with the id at the end, e.g.:
       #   http://api.constantcontact.com/ws/customers/yourname/contacts/29
       def parse_id(url)
-        url.to_s.split(/\//).last.to_i
+        url.to_s.split('/').last.to_i
       end
     
       def api_key

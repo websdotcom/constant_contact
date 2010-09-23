@@ -5,7 +5,7 @@ module ConstantContact
     attr_accessor :contacts, :lists, :activity_type
 
     def self.parse_id(url)
-      url.to_s.split(/\//).last
+      url.to_s.split('/').last
     end
 
     def self.element_path(id, prefix_options = {}, query_options = nil)
