@@ -49,7 +49,7 @@ All examples require setting up either the specific class you'll be use or the B
 ### Find a Contact By Email Address, Check if They're a Member of the Default List
 
     c = ConstantContact::Contact.find_by_email('jon@example.com')
-    @contact = ConstantContact::Contact.find(@contact.int_id)
+    @contact = ConstantContact::Contact.find(c.int_id) # Because Constant Contact doesn't return a full contact when searching by email
     puts 'In default contact list.' if @contact.contact_lists.include?(1) # contact_lists is an array of list ids
 
 
