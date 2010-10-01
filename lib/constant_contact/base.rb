@@ -133,9 +133,9 @@ module ConstantContact
       "<entry xmlns=\"http://www.w3.org/2005/Atom\">
         <title type=\"text\"> </title>
         <updated>#{Time.now.strftime(DATE_FORMAT)}</updated>
-        <author>Bluesteel</author>
+        <author></author>
         <id>#{id.blank? ? 'data:,none' : id}</id>
-        <summary type=\"text\">Bluesteel</summary>
+        <summary type=\"text\">#{self.class.name.split('::').last}</summary>
         <content type=\"application/vnd.ctct+xml\">
         #{self.to_xml}
         </content>
