@@ -19,7 +19,7 @@ module ConstantContact
     # Setup defaults when creating a new object since
     # CC requires so many extraneous fields to be present
     # when creating a new Campaign.
-    def initialize
+    def initialize(*args)
       obj = super
       obj.set_defaults
       obj
