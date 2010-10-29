@@ -17,6 +17,10 @@ module ActiveResource
       end
 
       def decode(xml)
+        if xml =~ /\<atom\:/ 
+          xml.gsub!( /\<atom\:/, '<' )
+          xml.gsub!( /\<\/atom\:/, '</' )
+        end
         return [] if no_content?(xml)
         result = Hash.from_xml(from_atom_data(xml))
         is_collection?(xml) ? result['records'] : result.values.first
