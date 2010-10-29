@@ -1,3 +1,3 @@
 module ConstantContact
-  Version = '1.2.0'.freeze
+  Version = '1.2.1'.freeze
 end
