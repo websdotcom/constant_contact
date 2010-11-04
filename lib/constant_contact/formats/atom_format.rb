@@ -17,10 +17,7 @@ module ActiveResource
       end
 
       def decode(xml)
-        if xml =~ /\<atom\:/ 
-          xml.gsub!( /\<atom\:/, '<' )
-          xml.gsub!( /\<\/atom\:/, '</' )
-        end
+        xml.gsub!( /\<(\/?)atom\:/, '<\1' ) # the "events" feeds have "atom:" in front of tags, for some reason
         return [] if no_content?(xml)
         result = Hash.from_xml(from_atom_data(xml))
         is_collection?(xml) ? result['records'] : result.values.first
