@@ -1,7 +1,6 @@
 directory = File.expand_path(File.dirname(__FILE__))
 
 require 'active_resource'
-require 'action_pack'
 require 'builder'
 require 'cgi' unless defined?(CGI) && defined?(CGI::escape)
 require File.join(directory, 'constant_contact', 'formats')
