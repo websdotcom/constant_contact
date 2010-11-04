@@ -2,7 +2,7 @@ require File.expand_path('../lib/constant_contact/version', __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "constant_contact"
-  s.version     = ConstantContact::Version
+  s.version     = ConstantContact::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Tim Case", "Ed Hickey", "Nathan Hyde", "Idris Mokhtarzada"]
   s.homepage    = "http://github.com/idris/constant_contact"
