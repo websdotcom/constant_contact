@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency("mocha")
   s.add_development_dependency("fakeweb")
 
-  s.files        = Dir.glob("lib/**/*") + %w(MIT-LICENSE README.md)
-  s.test_files   = Dir.glob("test/**/*")
+  s.files        = Dir.glob("{lib,test}/**/*") + %w(MIT-LICENSE README.md)
+  s.test_files   = Dir.glob("test/constant_contact/*_test.rb")
   s.require_path = 'lib'
 end
