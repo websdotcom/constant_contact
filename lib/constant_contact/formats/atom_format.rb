@@ -29,6 +29,7 @@ module ActiveResource
           if next_link
             next_path = next_link.attribute('href').value
             next_page = ::ConstantContact::Base.connection.get(next_path)
+            next_page = [next_page] if Hash === next_page
             list.concat(next_page)
           end
 
