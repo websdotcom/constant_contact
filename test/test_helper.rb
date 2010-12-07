@@ -15,7 +15,7 @@ class Test::Unit::TestCase
 end
 
 def fixture_file(filename)
-  return '' if filename == ''
+  return '' if filename.blank?
   file_path = File.expand_path(File.dirname(__FILE__) + '/fixtures/' + filename)
   File.read(file_path)
 end
