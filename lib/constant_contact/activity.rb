@@ -2,7 +2,7 @@
 module ConstantContact
   class Activity < Base
     self.format = ActiveResource::Formats::HtmlEncodedFormat
-    attr_accessor :contacts, :lists, :activity_type
+    attr_accessor :contacts, :lists, :activity_type, :raw_data # Data is a reserved word in Rails
 
     def self.parse_id(url)
       url.to_s.split('/').last
@@ -29,15 +29,18 @@ module ConstantContact
     protected
     def encoded_data
       result = "&data="
-      result += CGI.escape("Email Address,First Name,Last Name\n")
-      contact_strings = []
-      self.contacts.each do |contact|
-        contact_strings << "#{contact.email_address}, #{contact.first_name}, #{contact.last_name}"        
-      end      
-      result += CGI.escape(contact_strings.join("\n"))        
+      if self.raw_data.nil?
+        result += CGI.escape("Email Address,First Name,Last Name\n")
+        contact_strings = []
+        self.contacts.each do |contact|
+          contact_strings << "#{contact.email_address}, #{contact.first_name}, #{contact.last_name}"        
+        end      
+        result += CGI.escape(contact_strings.join("\n"))
+      else
+        result += CGI.escape(self.raw_data)
+      end
       return result
     end
-    
     
     def encoded_lists
       result = ""
