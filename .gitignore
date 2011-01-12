@@ -2,3 +2,4 @@
 .svn*
 dist
 rdoc
+.idea
