@@ -28,28 +28,22 @@ module ConstantContact
     def to_xml
       xml = Builder::XmlMarkup.new
       xml.tag!("Campaign", :xmlns => "http://ws.constantcontact.com/ns/1.0/") do
-      	self.attributes.each{ |k, v| xml.tag!(k.to_s.camelize, v) }
+        self.attributes.reject {|k,v| k == 'FromEmail' || k == 'ReplyToEmail' || k == 'ContactList'}.each{|k, v| xml.tag!( k.to_s.camelize, v )}
         # Overrides the default formatting above to CC's required format.
       	xml.tag!("ReplyToEmail") do
-      	  xml.tag!('Email', :id => self.reply_to_email_url)
+          xml.tag!('Email', :id => self.reply_to_email_url)
     	  end
       	xml.tag!("FromEmail") do
-      	  xml.tag!('Email', :id => self.from_email_url)
+          xml.tag!('Email', :id => self.from_email_url)
     	  end
       	xml.tag!("ContactLists") do 
-      	  xml.tag!("ContactList", :id => self.list_url)
+      	  xml.tag!("ContactList", :id => self.contact_list)
       	end
       end        
     end
     
-    def list_url
-      id = defined?(self.list_id) ? self.list_id : 1
-      List.find(id).id
-    end
-
     def from_email_url
-      id = defined?(self.from_email_id) ? self.from_email_id : 1
-      EmailAddress.find(id).id
+      EmailAddress.find(self.from_email).id
     end
 
     def reply_to_email_url
@@ -62,9 +56,9 @@ module ConstantContact
       self.view_as_webpage                  = 'NO' unless attributes.has_key?('ViewAsWebpage')
       self.from_name                        = self.class.user unless attributes.has_key?('FromName')
       self.permission_reminder              = 'YES' unless attributes.has_key?('PermissionReminder')
-      self.permission_reminder_text         = %Q{You're receiving this email because of your relationship with us. Please <ConfirmOptin><a style="color:#0000ff;">confirm</a></ConfirmOptin> your continued interest in receiving email from us.} unless attributes.has_key?('PermissionReminderText')
+      self.permission_reminder_text         = 'You\'re receiving this email because of your relationship with us. Please <ConfirmOptin><a style="color:#0000ff;">confirm</a></ConfirmOptin> your continued interest in receiving email from us.' unless attributes.has_key?('PermissionReminderText')
       self.greeting_salutation              = 'Dear' unless attributes.has_key?('GreetingSalutation')
-      self.greeting_name                    = "FirstName"  unless attributes.has_key?('GreetingName')
+      self.greeting_name                    = 'FirstName'  unless attributes.has_key?('GreetingName')
       self.greeting_string                  = 'Greetings!' unless attributes.has_key?('GreetingString')
       self.status                           = 'DRAFT' unless attributes.has_key?('Status')
       self.style_sheet                      = '' unless attributes.has_key?('StyleSheet')
