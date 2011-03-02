@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version     = ConstantContact::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Tim Case", "Ed Hickey", "Nathan Hyde", "Idris Mokhtarzada"]
-  s.homepage    = "http://github.com/idris/constant_contact"
+  s.homepage    = "http://github.com/websdotcom/constant_contact"
   s.summary     = "ActiveResource wrapper for the Constant Contact API."
   s.description = "This is a very ActiveResource-like ruby wrapper to the Constant Contact API."
   
