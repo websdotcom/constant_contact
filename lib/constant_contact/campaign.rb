@@ -87,7 +87,7 @@ module ConstantContact
     # Formats data if present.
     def before_save
       self.email_text_content = "<Text>#{email_text_content}</Text>" unless email_text_content.match /^\<Text/
-      self.date               = self.date.strftime(DATE_FORMAT) if attributes.has_key?('Date')
+      self.date               = self.date.strftime(DATE_FORMAT) if attributes.has_key?('Date') && self.date.is_a?(Time)
     end
 
 
