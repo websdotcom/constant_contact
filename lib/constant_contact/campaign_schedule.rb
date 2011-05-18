@@ -1,5 +1,7 @@
 module ConstantContact
   class CampaignSchedule < Base
+    DATE_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
+    
     attr_accessor :campaign_id
 
     self.prefix = "/campaigns/:campaign_id/"
@@ -21,11 +23,34 @@ module ConstantContact
     end
     
     def campaign_url
-      'http://api.constantcontact.com/ws/customers/' + self.class.user + '/campaigns/' + self.prefix_options[:campaign_id].to_s
+      'http://api.constantcontact.com'
+    end
+
+    def campaign_path
+      '/ws/customers/' + self.class.user + '/campaigns/' + self.prefix_options[:campaign_id].to_s
+    end
+    
+    def schedule_path
+      '/schedules/1'
     end
     
     def schedule_url
-      campaign_url + '/schedules/1'
+      campaign_url + campaign_path + schedule_path
+    end
+
+    # Overridden from CTCT::Base
+    def encode
+      tn = Time.now.strftime(DATE_FORMAT)
+      "<entry xmlns=\"http://www.w3.org/2005/Atom\">
+        <link href=\"#{self.campaign_path}#{self.schedule_path}\" rel=\"edit\"/>
+        <id>#{self.schedule_url}</id>
+        <title type=\"text\">#{tn}</title>
+        <updated>#{tn}</updated>
+        <author><name>WHERE, Inc</name></author>
+        <content type=\"application/vnd.ctct+xml\">
+        #{self.to_xml}
+        </content>
+      </entry>"
     end
   end
 end
